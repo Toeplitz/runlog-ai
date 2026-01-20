@@ -46,3 +46,4 @@ htmlcov/
 .tox/
 *.cover
 .hypothesis/
+training_log_chunks/

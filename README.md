@@ -107,10 +107,38 @@ python3 view_training_data.py
 ### 5. Create Training Log for AI Analysis
 
 ```bash
+# Default: Creates chunks of 5 activities each in training_log_chunks/ folder
 python3 create_training_log.py
 ```
 
-This creates `training_log.json` - a comprehensive file with all your activities, perfect for AI training coaches.
+By default, this **automatically chunks** your training log into manageable files (5 activities per chunk) stored in the `training_log_chunks/` folder. Each chunk is ~5-10 MB, perfect for uploading to ChatGPT and other AI tools.
+
+#### Output Files (Default Behavior)
+
+The `training_log_chunks/` folder will contain:
+- `training_log_part1.json` - First 5 activities
+- `training_log_part2.json` - Next 5 activities
+- `training_log_part3.json` - Next 5 activities
+- ...and so on
+- `training_log_index.json` - Overview of all chunks with statistics
+
+#### Customizing Chunking
+
+```bash
+# Disable chunking (create single large file)
+python3 create_training_log.py --chunk-size 0
+
+# Use different chunk size
+python3 create_training_log.py --chunk-size 10
+
+# Custom output directory for chunks
+python3 create_training_log.py --chunks-dir my_chunks
+
+# Custom chunk naming pattern
+python3 create_training_log.py --chunk-output-pattern "runs_{}.json"
+```
+
+Each chunk file is optimized for AI tools and can be uploaded individually. The index file helps you navigate which chunk contains which activities and date ranges.
 
 ## Usage Examples
 
@@ -136,10 +164,16 @@ The JSON output is optimized for AI analysis. You can:
    [attach parsed_data/20251202.json]
    ```
 
-2. **Upload training log** for comprehensive analysis:
+2. **Upload training log chunks** for comprehensive analysis (recommended):
    ```
-   "Review my training over the past month and suggest next steps"
-   [attach training_log.json]
+   "Analyze my recent training from this chunk"
+   [attach training_log_chunks/training_log_part1.json]
+
+   "Compare my training patterns across different periods"
+   [attach training_log_chunks/training_log_index.json to see overview]
+
+   "Review my December training and suggest improvements"
+   [attach the relevant chunk covering December]
    ```
 
 3. **Ask specific questions**:
@@ -147,6 +181,7 @@ The JSON output is optimized for AI analysis. You can:
    - "How does my heart rate respond to different paces?"
    - "What's my optimal cadence?"
    - "Do I need more easy runs?"
+   - "Based on this chunk, am I ready for a marathon?"
 
 ## Output Format
 
@@ -319,13 +354,18 @@ Most training platforms lock your data in proprietary formats. runlog-ai gives y
 # Parse all your runs
 python3 parse_coros_data.py
 
-# Create comprehensive log
+# Create comprehensive log (automatically chunked)
 python3 create_training_log.py
 
-# Now you can ask AI questions like:
-# "Based on my training_log.json, am I ready for a marathon?"
+# Files created in training_log_chunks/:
+# - training_log_part1.json, training_log_part2.json, etc.
+# - training_log_index.json (overview)
+
+# Now you can upload chunks to AI and ask questions like:
+# "Based on this chunk, am I ready for a marathon?"
 # "What's my optimal easy run pace based on my heart rate data?"
-# "Do I show signs of overtraining?"
+# "Do I show signs of overtraining in this period?"
+# "Compare my training intensity across these chunks"
 ```
 
 ## Support
