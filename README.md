@@ -335,5 +335,3 @@ python3 create_training_log.py
 - Examples: Check out [QUICK_START.md](QUICK_START.md)
 
 ---
-
-**Made for runners who want to understand their training data and leverage AI coaching.**
