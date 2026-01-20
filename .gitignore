@@ -47,3 +47,10 @@ htmlcov/
 *.cover
 .hypothesis/
 training_log_chunks/
+
+# User data
+data/
+parsed_data/
+training_log.json
+plots/
+*.png

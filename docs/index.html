@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunLog - Parse Running Watch Data to Structured JSON</title>
+    <meta name="description" content="Convert FIT, TCX, and CSV running watch files into clean, structured JSON format. Parse files directly in your browser with complete privacy.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>🏃 RunLog</h1>
+                <p class="tagline">Convert running watch data to structured JSON format</p>
+            </div>
+            <a href="https://github.com/Toeplitz/runlog-ai" class="github-link" target="_blank">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                View on GitHub
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Parse Running Watch Files</h2>
+            <p>Convert FIT, TCX, and CSV files into clean, structured JSON. All processing happens in your browser - your data stays private and never leaves your device.</p>
+        </section>
+
+        <div class="main-grid">
+            <section class="upload-section">
+                <div class="upload-box" id="uploadBox">
+                    <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <h3>Drop files or click to browse</h3>
+                    <p>FIT, TCX, CSV • Multiple files OK</p>
+                    <input type="file" id="fileInput" multiple accept=".fit,.tcx,.csv,.FIT,.TCX,.CSV" hidden>
+                    <button class="btn-primary" id="browseBtn">Browse Files</button>
+                    <button class="btn-help" id="helpBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        How It Works
+                    </button>
+                </div>
+
+                <div class="options-section" id="optionsSection" style="display: none;">
+                    <h3>Options</h3>
+                    <div class="options-compact">
+                        <label class="option-row">
+                            <span>Chunk Size:</span>
+                            <input type="number" id="chunkSize" value="5" min="0" max="100">
+                        </label>
+                        <label class="option-row">
+                            <input type="checkbox" id="includeGPS">
+                            <span>Include GPS Data</span>
+                        </label>
+                    </div>
+                    <button class="btn-primary btn-block" id="processBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Process Files
+                    </button>
+                </div>
+            </section>
+
+            <section class="files-section" id="filesSection" style="display: none;">
+                <div class="files-header">
+                    <h3>Selected Files (<span id="fileCount">0</span>)</h3>
+                    <button class="btn-text" id="clearAllBtn">Clear All</button>
+                </div>
+                <div id="filesList" class="files-list"></div>
+            </section>
+        </div>
+
+        <section class="progress-section" id="progressSection" style="display: none;">
+            <h3>Processing...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Parsing files...</p>
+        </section>
+
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <h3>✓ Processing Complete!</h3>
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="download-section">
+                <h4>Download Structured JSON</h4>
+                <div id="downloadLinks" class="download-links"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💡 How It Works</h3>
+                <button class="modal-close" id="modalClose">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h4>📂 File Organization</h4>
+                    <p><strong>Same base filename = one activity</strong></p>
+                    <p>Files like <code>run1.csv</code>, <code>run1.tcx</code>, <code>run1.fit</code> are merged into a single JSON activity object.</p>
+
+                    <p><strong>Different filenames = separate activities</strong></p>
+                    <p>Upload <code>run1.*</code> and <code>run2.*</code> to create 2 distinct activity objects in the output.</p>
+                </div>
+
+                <div class="help-section">
+                    <h4>📊 File Types</h4>
+                    <p><strong>TCX files (recommended)</strong></p>
+                    <p>Contain precise timestamps, lap data, trackpoints, and heart rate information. Best for complete activity data.</p>
+
+                    <p><strong>CSV files</strong></p>
+                    <p>Typically contain split summaries and aggregated statistics from your watch.</p>
+
+                    <p><strong>FIT files</strong></p>
+                    <p>Binary format - basic parsing only in browser. Use the CLI tool for full FIT parsing.</p>
+                </div>
+
+                <div class="help-section">
+                    <h4>📥 Output Format</h4>
+                    <p>Download clean, structured JSON files with:</p>
+                    <ul>
+                        <li>Activity metadata (date, type, duration)</li>
+                        <li>Lap-by-lap breakdowns</li>
+                        <li>Heart rate data</li>
+                        <li>GPS trackpoints (optional)</li>
+                        <li>Summary statistics</li>
+                    </ul>
+                    <p>Perfect for analysis, visualization, or feeding into other tools.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Open source project by the running community. Made with ❤️ for runners.</p>
+            <p>
+                <a href="https://github.com/Toeplitz/runlog-ai">GitHub</a> •
+                <a href="https://github.com/Toeplitz/runlog-ai/issues">Report Issue</a> •
+                <a href="https://github.com/Toeplitz/runlog-ai#readme">Documentation</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="parser.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

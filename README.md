@@ -9,6 +9,12 @@
 
 A Python toolkit for parsing and analyzing running watch data exports (Coros, Garmin, and other FIT/TCX formats). Convert FIT, TCX, and CSV files into structured JSON format optimized for AI training analysis and personal insights.
 
+## 🌐 Web App Available!
+
+**Don't want to install Python?** Use our [web app](https://toeplitz.github.io/runlog-ai) that runs entirely in your browser! Just drag and drop your files - no installation, no data leaves your computer.
+
+👉 **[Launch Web App](https://toeplitz.github.io/runlog-ai)**
+
 ## Features
 
 - **Multi-format parsing**: Handles FIT, TCX, and CSV exports from Coros watches
