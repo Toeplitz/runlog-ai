@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://github.com/toeplitz/runlog-ai/workflows/Tests/badge.svg)](https://github.com/toeplitz/runlog-ai/actions)
+[![codecov](https://codecov.io/gh/toeplitz/runlog-ai/branch/main/graph/badge.svg)](https://codecov.io/gh/toeplitz/runlog-ai)
 
 > Transform your running watch data into AI-ready training insights
 
@@ -248,6 +250,38 @@ See [METADATA_GUIDE.md](METADATA_GUIDE.md) for complete documentation.
 
 - Python 3.6+
 - `fitparse` (for FIT file parsing)
+
+## Testing
+
+This project includes a comprehensive pytest test suite.
+
+### Running Tests
+
+```bash
+# Install test dependencies (if not already installed)
+pip install -r requirements.txt
+
+# Run all tests
+pytest
+
+# Run tests with coverage report
+pytest --cov=. --cov-report=html
+
+# Run specific test file
+pytest tests/test_parse_coros_data.py
+
+# Run tests without coverage (faster)
+pytest --no-cov
+```
+
+### Test Structure
+
+- `tests/test_parse_coros_data.py` - Tests for data parsing (CSV, TCX, FIT)
+- `tests/test_create_training_log.py` - Tests for training log aggregation
+- `tests/test_view_training_data.py` - Tests for data viewing/display
+- `tests/conftest.py` - Shared test fixtures
+
+See [tests/README.md](tests/README.md) for detailed testing documentation.
 
 ## Contributing
 
