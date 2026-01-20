@@ -53,4 +53,4 @@ npx http-server docs
 
 This app is automatically deployed to GitHub Pages when pushed to the `main` branch.
 
-Access it at: `https://<username>.github.io/runlog-ai`
+Access it at: `https://toeplitz.github.io/runlog-ai`
